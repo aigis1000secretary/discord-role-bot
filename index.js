@@ -14,14 +14,14 @@ client.on('ready', onReady);
 client.on('messageReactionAdd', addRole);
 client.on('messageReactionRemove', removeRole);
 
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN.trim());
 
 /**
  * 'ready' event handler for discord.js client
  * find the first message in the specified channel and save it for later
  */
 async function onReady() {
-  const channel = client.channels.find((channel) => channel.name === config.channel);
+  const channel = client.channels.cache.find((channel) => channel.name === config.channel);
 
   // channel will not contain messages after it is found
   try {
@@ -31,7 +31,8 @@ async function onReady() {
     return;
   }
 
-  config.message_id = channel.messages.first().id;
+  let msg = channel.messages.cache.first();
+  config.message_id = msg.id;
 
   console.log(`Watching message '${config.message_id}' for reactions...`)
 }
@@ -41,7 +42,7 @@ async function onReady() {
  * @param {Object} reaction - the reaction that the user added
  * @param {Objext} user - the user that added a role to a message
  */
-async function addRole({message, _emoji}, user) {
+async function addRole({ message, _emoji }, user) {
   if (user.bot || message.id !== config.message_id) {
     return;
   }
@@ -60,14 +61,14 @@ async function addRole({message, _emoji}, user) {
 
   const { guild } = message;
 
-  const member = guild.members.get(user.id);
-  const role = guild.roles.find((role) => role.name === config.roles[_emoji.name]);
+  const member = guild.members.cache.get(user.id);
+  const role = guild.roles.cache.find((role) => role.name === config.roles[_emoji.name]);
 
   if (!role) {
-    console.error(`Role not found for '${_emoji.name}'`);
+    console.error(`Role not found for '${_emoji.name}' (${_emoji.identifier})`);
     return;
   }
-  
+
   try {
     member.roles.add(role.id);
   } catch (err) {
@@ -81,7 +82,7 @@ async function addRole({message, _emoji}, user) {
  * @param {Object} reaction - the reaction that the user added
  * @param {Objext} user - the user that added a role to a message
  */
-async function removeRole({message, _emoji}, user) {
+async function removeRole({ message, _emoji }, user) {
   if (user.bot || message.id !== config.message_id) {
     return;
   }
@@ -100,15 +101,15 @@ async function removeRole({message, _emoji}, user) {
 
   const { guild } = message;
 
-  const member = guild.members.get(user.id);
-  const role = guild.roles.find((role) => role.name === config.roles[_emoji.name]);
+  const member = guild.members.cache.get(user.id);
+  const role = guild.roles.cache.find((role) => role.name === config.roles[_emoji.name]);
 
   if (!role) {
-    console.error(`Role not found for '${_emoji.name}'`);
+    console.error(`Role not found for '${_emoji.name}' (${_emoji.identifier})`);
     return;
   }
 
-  try{
+  try {
     member.roles.remove(role.id);
   } catch (err) {
     console.error('Error removing role', err);

@@ -24,6 +24,7 @@ A bot that assigns roles based on reactions using the discord.js module.
 * View Channels
 * Read Message History
 * Manage Roles
+* https://discordapp.com/oauth2/authorize?client_id= <BOT_TOKEN> &permissions=268502016&scope=bot
 
 ## Installation
 
@@ -43,8 +44,13 @@ The bot will watch the first message in the specified channel.  If a reaction is
 
 ## Run Locally
 
+Mac
 ```
 BOT_TOKEN=<insert-bot-token-here> npm start
+```
+Windows
+```
+set BOT_TOKEN=<insert-bot-token-here>&& npm start
 ```
 
 ## Deploy to Heroku

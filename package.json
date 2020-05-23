@@ -11,9 +11,9 @@
   "author": "Brian Buchanan",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "discordjs/discord.js#master"
+    "discord.js": "github:discordjs/discord.js#master"
   },
   "devDependencies": {
-    "nodemon": "^1.19.2"
+    "nodemon": "^1.19.4"
   }
 }
